@@ -33,15 +33,21 @@
        (string/join "\n")))
 
 (defn exit
-  "Something to redef so we can test the control logic in main."
-  [status]
+  "Print an optional message and exit with the status."
+  [status & [msg]]
+  (when msg (println msg))
   (System/exit status))
+
+(defn error-msg [errors]
+  (str "The following errors occurred while parsing:\n\n"
+       (string/join "\n" errors)))
 
 (defn -main [& args]
   ;; options are parsed :in-order so we handle help first
   (let [{:keys [options arguments errors summary]}
         (cli/parse-opts args cli-options :in-order true)]
     (cond
-     (:help options) (do (println (usage summary))
-                         (exit 0)))
+     (:help options) (exit 0 (usage summary))
+     errors (exit 1 (error-msg errors))
+     (= 0 (count arguments)) (exit 1 (usage summary)))
     (println "Did it.")))
