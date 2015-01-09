@@ -20,20 +20,26 @@ Each digit is made of nine characters, three per line. Trailing spaces are not t
 
 Account numbers are expected to be of a certain format, namely they are supposed to pass the following checksum:
 
+```
 account number:  3  4  5  8  8  2  8  6  5
 position names:  d9 d8 d7 d6 d5 d4 d3 d2 d1
+```
 
 checksum calculation:
 
+```
 ((1*d1) + (2*d2) + (3*d3) + ... + (9*d9)) mod 11 == 0
+```
 
 ### Phase 3
 
 When passed a certain flag the parser should emmit an output file listing what it understands. The output file has one account number per row. If some characters are illegible, they are replaced by a ?. In the case of a wrong checksum, or illegible number, this is noted in a second column indicating status.
 
+```
 457508000
 664371495 ERR
 86110??36 ILL
+```
 
 ## Usage
 
