@@ -1,0 +1,3 @@
+(ns paceout.main
+  "The entrypiont for the paceout account number parser. Handles
+  command line arguments and the top level control flow.")
