@@ -2,7 +2,7 @@
 
 An account number parser.
 
-## Details
+## Dirty Details
 
 ### Phase 1
 
@@ -14,7 +14,7 @@ The paceout account number parser expects the account numbers to be in a file, o
 |_||_||_||_||_||_||_||_||_|
 ```                         
 
-Each digit is made of nine characters, three per line. Trailing spaces are not trimmed. For example, the first line of a zero is " _ ", not " _". The parser is somewhat resiliant, if it doesn't recognize a digit it should replace it with a question mark and continue parsing both the number and the remainder of the file. Files are expected to contail about 500 account numbers.
+Each digit is made of nine characters, three per line. Trailing spaces are not trimmed. For example, the first line of a zero is " _ ", not " _". The parser is somewhat resiliant, if it doesn't recognize a digit it should replace it with a question mark and continue parsing both the number and the remainder of the file. Files are expected to contain about 500 account numbers.
 
 ### Phase 2
 
@@ -76,7 +76,7 @@ cd paceout
 lein unberjar
 ```
 
-This packages the Clojure source into a self contained executable jar that can be run from the `bin/parse` shell script.
+This packages the Clojure source into a self contained executable jar. Use the `bin/parse` shell script to execute the code.
 
 ### Testing
 

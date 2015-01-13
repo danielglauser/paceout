@@ -3,6 +3,20 @@
   file of account numbers and an optional file for recording output."
   (:require [clojure.string :as string]))
 
+(defn checksum
+  "Given a nine digit account number represented as a string returns
+  the value of the following checksum: ((1*d1) + (2*d2) + (3*d3) + ...
+  + (9*d9)) mod 11 == 0"
+  [str-num]
+  (if (re-find #"\?" str-num)
+    false
+    (let [multiplied (map-indexed (fn [idx char]
+                                    (* (+ 1 idx)
+                                       (-> char str Integer/parseInt)))
+                                  (reverse str-num))
+          added (reduce + multiplied)]
+      (mod added 11))))
+
 (defn read-three-lines!
   "Returns a vector of three strings corresponding to the next three
   lines from the reader."
@@ -68,11 +82,15 @@
     (parse-account-number* three-lines)))
 
 (defn parse-account-numbers
-  "Parses account numbers from the reader and writes them to the writer."
-  [reader writer]
+  "Parses account numbers from the reader and writes them to the writer.
+  Skips illegal account numbers that aren't valid?."
+  [reader writer & [valid?]]
   (loop [account-number (parse-account-number reader)]
     (when-not (string/blank? account-number)
-      (.write writer (str account-number "\n"))
+      (if valid?
+        (when (valid? account-number)
+          (.write writer (str account-number "\n")))
+        (.write writer (str account-number "\n")))
       (recur (parse-account-number reader)))))
 
 (defn parse-digit

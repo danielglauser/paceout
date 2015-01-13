@@ -57,15 +57,17 @@
 (defn -main [& args]
   ;; options are parsed :in-order so we handle help first
   (let [{:keys [options arguments errors summary]}
-        (cli/parse-opts args cli-options :in-order true)]
+        (cli/parse-opts args cli-options :in-order true)
+        input-filename (first arguments)]
     (cond
      (:help options) (exit 0 (usage summary))
      errors (exit 1 (error-msg errors))
      (= 0 (count arguments)) (exit 1 (usage summary)))
 
-    (with-open [in (get-reader (first arguments))
-                out (get-writer)]
-      (try
-        (parser/parse-account-numbers in out)
-        (catch Exception ex
-          (println "Error when parsing: "(.getMessage ex)))))))
+    (when input-filename
+          (with-open [in (get-reader input-filename)
+                      out (get-writer)]
+            (try
+              (parser/parse-account-numbers in out)
+              (catch Exception ex
+                (println "Error when parsing: " (.getMessage ex))))))))
