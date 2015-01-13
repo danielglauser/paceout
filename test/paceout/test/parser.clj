@@ -31,7 +31,7 @@
   (is (= "912345678"
          (parse-account-number* [" _     _  _     _  _  _  _ "
                                  "|_|  | _| _||_||_ |_   ||_|"
-                                 "  |  ||_  _|  | _||_|  ||_|"])))
+                                 " _|  ||_  _|  | _||_|  ||_|"])))
   (is (= "" (parse-account-number* nil))))
 
 (deftest test-parse-account-numbers
@@ -89,7 +89,7 @@
                            "|_|"])))
   (is (= "9" (parse-digit [" _ "
                            "|_|"
-                           "  |"])))
+                           " _|"])))
   (is (= "?" (parse-digit ["   "
                            " _|"
                            "  |"])))
