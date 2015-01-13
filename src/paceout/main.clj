@@ -8,7 +8,8 @@
   (:gen-class))
 
 (def cli-options [["-h" "--help"]
-                  ["-o" "--outfile"]])
+                  ["-o" "--outfile" "Output file"
+                   :required "optional"]])
 
 (defn usage [options-summary]
   (->> [(str "parse: A tool for parsing ASCII account numbers.")
@@ -66,8 +67,10 @@
 
     (when input-filename
           (with-open [in (get-reader input-filename)
-                      out (get-writer)]
+                      out (get-writer (:outfile options))]
             (try
-              (parser/parse-account-numbers in out)
+              (parser/parse-account-numbers in out
+                                            #(= 0 (parser/checksum %))
+                                            true)
               (catch Exception ex
                 (println "Error when parsing: " (.getMessage ex))))))))

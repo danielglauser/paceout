@@ -81,17 +81,32 @@
         _ (read-blank-line! reader)]
     (parse-account-number* three-lines)))
 
+(defn get-parsed-status
+  "Given an account number returns nil for valid account numbers,
+  \"ILL\" if the account number contains unparsed digits and \"ERR\"
+  if it is not valid."
+  [account-number valid?]
+  (cond
+   (re-find #"\?" account-number) "ILL"
+   (and valid?
+        (not (valid? account-number))) "ERR"
+   :default nil))
+
 (defn parse-account-numbers
   "Parses account numbers from the reader and writes them to the writer.
   Skips illegal account numbers that aren't valid?."
-  [reader writer & [valid?]]
+  [reader writer & [valid? include-output-status]]
   (loop [account-number (parse-account-number reader)]
     (when-not (string/blank? account-number)
-      (if valid?
-        (when (valid? account-number)
-          (.write writer (str account-number "\n")))
-        (.write writer (str account-number "\n")))
-      (recur (parse-account-number reader)))))
+      (let [status (get-parsed-status account-number valid?)
+            formatted-status (if status
+                               (str " " status)
+                               status)]
+        (.write writer
+                (str account-number
+                     (when include-output-status formatted-status)
+                     "\n"))
+        (recur (parse-account-number reader))))))
 
 (defn parse-digit
   "Reads a seq of three strings of three characters, underscores, pipes,

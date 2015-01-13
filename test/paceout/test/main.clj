@@ -1,7 +1,8 @@
 (ns paceout.test.main
   "Clojure.test tests for the main control flow of the paceout account
   number parser."
-  (:require [clojure.test :refer :all]
+  (:require [clojure.java.io :as io]
+            [clojure.test :refer :all]
             [paceout.main :refer :all]))
 
 (deftest test-main-usage
@@ -36,3 +37,4 @@
         (-main "-wat")
         (is (= 1 @exit-code) "there is no -wat flag")
         (is (re-find #"Unknown option" @message))))))
+

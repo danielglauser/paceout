@@ -53,9 +53,11 @@
 (deftest test-parse-invalid-account-numbers
   (with-open [rdr (-> (io/resource "invalid_account_numbers.txt") io/reader)
               wtr (java.io.StringWriter.)]
-    (parse-account-numbers rdr wtr #(= 0 (checksum %)))
+    (parse-account-numbers rdr wtr #(= 0 (checksum %)) true)
     (let [account-numbers (.toString wtr)]
-      (is (= "" account-numbers)))))
+      (is (= (str "888888888 ERR\n490067715 ERR\n012345678 ERR\n"
+                  "49006771? ILL\n12345678? ILL\n")
+             account-numbers)))))
 
 (deftest test-parse-digit
   (is (= "0" (parse-digit [" _ "
